@@ -15,7 +15,7 @@ guestbookRouter.get('/', async (req, res) => {
 
 guestbookRouter.post('/',imagesUpload.single('image'), async (req, res) => {
     if(!req.body.message) {
-        res.status(400).send({error:"please send message"});
+        res.status(400).send({error:"Please send message"});
         return
     } else {
         const entry: EntryWithoutId = {
