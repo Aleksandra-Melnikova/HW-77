@@ -1,24 +1,32 @@
 import React, { useCallback, useState } from "react";
-import { IInputMessage } from "../../types";
-import { createMessage } from "../../thunks/MessagesThunk.ts";
+import { IInputEntry } from '../../types';
 import { useAppDispatch, useAppSelector } from "../../app/hooks.ts";
 import { toast } from "react-toastify";
 import Grid from "@mui/material/Grid2";
 import { Box, TextField } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { selectAddLoading } from "../../slices/MessagesSlice.ts";
+import { selectAddLoading } from "../../slices/EntriesSlice.ts";
+import FileInput from '../FileInput/FileInput.tsx';
+import { createEntry } from '../../thunks/EntriesThunk.ts';
 
-const FormAddNewMessage = () => {
-  const [inputMessage, setInputMessage] = useState<IInputMessage>({
-    author: "",
-    message: "",
-  });
+
+const initialState: IInputEntry = {
+  author: "",
+  message: "",
+  image: null,
+};
+
+const FormAddNewEntry = () => {
+
+  const [inputEntry, setInputEntry] = useState<IInputEntry>(
+    initialState
+  );
   const isAddLoading = useAppSelector(selectAddLoading);
   const dispatch = useAppDispatch();
   const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     const value = e.target.value;
-    setInputMessage((prevState) => {
+    setInputEntry((prevState) => {
       return { ...prevState, [name]: value };
     });
   };
@@ -27,13 +35,12 @@ const FormAddNewMessage = () => {
     e.preventDefault();
 
     if (
-      inputMessage.author.trim().length > 0 &&
-      inputMessage.message.trim().length > 0
+      inputEntry.message.trim().length > 0
     ) {
-      setInputMessage({
-        ...inputMessage,
-        author: inputMessage.author,
-        message: inputMessage.message,
+      setInputEntry({
+        ...inputEntry,
+        author: inputEntry.author,
+        message: inputEntry.message,
       });
       postNewMessage().catch((e) => console.error(e));
     } else {
@@ -43,17 +50,23 @@ const FormAddNewMessage = () => {
 
   const postNewMessage = useCallback(async () => {
     if (
-      inputMessage.author.trim().length > 0 &&
-      inputMessage.message.trim().length > 0
+      inputEntry.author.trim().length > 0 &&
+      inputEntry.message.trim().length > 0
     ) {
-      await dispatch(createMessage(inputMessage));
+      await dispatch(createEntry(inputEntry));
       toast.success("Message added successfully!");
-      setInputMessage({
-        author: "",
-        message: "",
-      });
+      setInputEntry(initialState);
     }
-  }, [dispatch, inputMessage]);
+  }, [dispatch, inputEntry]);
+
+  const fileEventChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {name, files} = e.target;
+    if (files) {
+      setInputEntry(prevState => ({
+        ...prevState, [name]: files[0] || null,
+      }));
+    }
+  };
 
   return (
     <Box marginBottom={2}>
@@ -64,7 +77,7 @@ const FormAddNewMessage = () => {
             rows={4}
             id="decoded"
             label="Your name"
-            value={inputMessage.author}
+            value={inputEntry.author}
             onChange={inputChangeHandler}
             name="author"
           />
@@ -76,10 +89,13 @@ const FormAddNewMessage = () => {
             rows={4}
             id="message"
             label="Your message:"
-            value={inputMessage.message}
+            value={inputEntry.message}
             onChange={inputChangeHandler}
             name="message"
           />
+        </Grid>
+        <Grid size={8} >
+          <FileInput onGetFile={fileEventChangeHandler} name={'image'} label={'Image'}/>
         </Grid>
         <Box marginTop={1} marginBottom={4}>
           <LoadingButton
@@ -96,4 +112,4 @@ const FormAddNewMessage = () => {
   );
 };
 
-export default FormAddNewMessage;
+export default FormAddNewEntry;

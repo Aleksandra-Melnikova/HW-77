@@ -1,8 +1,8 @@
-import Chat from "./containers/Chat/Chat.tsx";
+import GuestBook from "./containers/GuestBook/GuestBook.tsx";
 
 const App = () => (
   <>
-    <Chat />
+    <GuestBook />
   </>
 );
 

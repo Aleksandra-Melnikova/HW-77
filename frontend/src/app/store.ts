@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { messagesReducer } from "../slices/MessagesSlice.ts";
+import { entriesReducer } from '../slices/EntriesSlice.ts';
 
 export const store = configureStore({
   reducer: {
-    messages: messagesReducer,
+    entries: entriesReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

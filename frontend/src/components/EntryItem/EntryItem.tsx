@@ -1,16 +1,16 @@
 import React from "react";
-import { Box, Container, Typography } from "@mui/material";
+import { Box, CardMedia, Container, Typography } from '@mui/material';
 import Grid from "@mui/material/Grid2";
 export interface IMessageItemProps {
   author: string;
-  datetime?: string;
   message: string;
+  image?: string | null;
 }
 
-const MessageItem: React.FC<IMessageItemProps> = ({
+const EntryItem: React.FC<IMessageItemProps> = ({
   author,
-  datetime,
   message,
+  image = null,
 }) => {
   return (
     <Container maxWidth="md">
@@ -38,22 +38,6 @@ const MessageItem: React.FC<IMessageItemProps> = ({
               {author}
             </Typography>
           </Box>
-          {datetime === "today" ? null : (
-            <Box>
-              <Typography
-                display={"inline-block"}
-                color={"textSecondary"}
-                fontWeight={"bold"}
-                fontSize={24}
-              >
-                Date:{" "}
-              </Typography>{" "}
-              <Typography display={"inline-block"} fontSize={24}>
-                {" "}
-                {datetime}{" "}
-              </Typography>
-            </Box>
-          )}
 
           <Box>
             <Typography
@@ -69,10 +53,11 @@ const MessageItem: React.FC<IMessageItemProps> = ({
               {message}{" "}
             </Typography>
           </Box>
+          {image?<> <CardMedia style={{width:'100%', height:'auto'}} component="img" image={image}/></>:null}
         </Grid>
       </Grid>
     </Container>
   );
 };
 
-export default MessageItem;
+export default EntryItem;

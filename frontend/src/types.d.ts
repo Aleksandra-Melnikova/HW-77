@@ -1,7 +1,7 @@
 export interface IInputEntry {
   author: string;
   message: string;
-  image: string;
+  image: File | null;
 }
 
 export interface IEntry {
