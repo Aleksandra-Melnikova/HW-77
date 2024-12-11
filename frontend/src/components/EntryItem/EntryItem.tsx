@@ -1,6 +1,6 @@
 import React from "react";
-import { Box, CardMedia, Container, Typography } from '@mui/material';
-import Grid from "@mui/material/Grid2";
+import { Box, Card, CardContent, CardMedia, Typography } from '@mui/material';
+import { apiURL } from '../../../globalConstans.ts';
 export interface IMessageItemProps {
   author: string;
   message: string;
@@ -12,51 +12,41 @@ const EntryItem: React.FC<IMessageItemProps> = ({
   message,
   image = null,
 }) => {
+
+  const entryImage = apiURL +'/'+ image;
   return (
-    <Container maxWidth="md">
-      <Grid
-        container
-        spacing={2}
-        marginBottom={3}
-        padding={3}
-        border={1}
-        borderColor={"slategray"}
-        borderRadius={1}
-      >
-        <Grid size={12}>
+    <Card style={{padding:'20px', marginBottom:'20px', backgroundColor:'lightsteelblue'}}>
+      <CardContent >
+        {image?<> <CardMedia style={{width:'50%', height:'auto', marginInline:' auto', float:'left', marginInlineEnd:'10px', border:'slategray', borderRadius:'10px'}} component="img" image={entryImage}/></>:null}
           <Box>
             {" "}
             <Typography
               display={"inline-block"}
-              fontWeight={"bold"}
               fontSize={24}
               color={"textSecondary"}
             >
-              From:{" "}
+              Author:
             </Typography>{" "}
-            <Typography display={"inline-block"} fontSize={24}>
+            <Typography display={"inline-block"} fontWeight={'bold'} fontSize={24}>
               {author}
             </Typography>
           </Box>
-
           <Box>
             <Typography
               display={"inline-block"}
               color={"textSecondary"}
-              fontWeight={"bold"}
               fontSize={24}
             >
               Text of message:{" "}
             </Typography>{" "}
-            <Typography display={"inline-block"} fontSize={24}>
+            <Typography display={"inline-block"} fontWeight={'bold'} fontSize={24}>
               {" "}
               {message}{" "}
             </Typography>
           </Box>
-          {image?<> <CardMedia style={{width:'100%', height:'auto'}} component="img" image={image}/></>:null}
-        </Grid>
-      </Grid>
-    </Container>
+      </CardContent>
+    </Card>
+
   );
 };
 

@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react';
 import Grid from '@mui/material/Grid2';
 import { Button, TextField } from '@mui/material';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+
 
 interface Props {
   name: string;
@@ -39,7 +41,7 @@ const FileInput:React.FC<Props> = ({name,label,onGetFile}) => {
         onChange={onFileChange}
         ref={inputRef}
       />
-      <Grid container spacing={2} direction="row" alignItems={'center'}>
+      <Grid container marginTop={1} spacing={2} direction="row" alignItems={'center'}>
         <Grid >
           <TextField
           disabled
@@ -49,7 +51,7 @@ const FileInput:React.FC<Props> = ({name,label,onGetFile}) => {
           />
         </Grid>
         <Grid>
-          <Button variant = 'contained' onClick = {activateInput}>Browse</Button>
+          <Button variant={'text'} onClick = {activateInput} style={{height:'50px'}}><AttachFileIcon fontSize={'large'}/></Button>
         </Grid>
       </Grid>
     </>

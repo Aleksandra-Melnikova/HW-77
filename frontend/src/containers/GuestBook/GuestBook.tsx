@@ -38,9 +38,10 @@ const GuestBook = () => {
         variant={"h3"}
         marginTop={3}
         marginBottom={3}
+        color={'primary'}
         align={"center"}
       >
-        Chat
+        Guest book
       </Typography>
 
       {isAllFetchLoading ? (
