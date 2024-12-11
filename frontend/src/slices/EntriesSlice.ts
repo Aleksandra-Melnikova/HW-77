@@ -1,19 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IEntry } from '../types';
+import { IEntry } from "../types";
 import { RootState } from "../app/store.ts";
-import {
-  createEntry,
-  fetchAllEntries,
-} from '../thunks/EntriesThunk.ts';
+import { createEntry, fetchAllEntries } from "../thunks/EntriesThunk.ts";
 
 interface EntriesState {
- entries: IEntry[];
+  entries: IEntry[];
   isFetchLoading: boolean;
   isAddLoading: boolean;
 }
 
 const initialState: EntriesState = {
- entries: [],
+  entries: [],
   isFetchLoading: false,
   isAddLoading: false,
 };

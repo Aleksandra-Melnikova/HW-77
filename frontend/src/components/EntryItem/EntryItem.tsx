@@ -1,6 +1,12 @@
 import React from "react";
-import { Box, Card, CardContent, CardMedia, Typography } from '@mui/material';
-import { apiURL } from '../../../globalConstans.ts';
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  Typography,
+} from "@mui/material";
+import { apiURL } from "../../globalConstans.ts";
 export interface IMessageItemProps {
   author: string;
   message: string;
@@ -12,41 +18,38 @@ const EntryItem: React.FC<IMessageItemProps> = ({
   message,
   image = null,
 }) => {
-
-  const entryImage = apiURL +'/'+ image;
+  const entryImage = apiURL + "/" + image;
   return (
-    <Card style={{padding:'20px', marginBottom:'20px', backgroundColor:'lightsteelblue'}}>
-      <CardContent >
-        {image?<> <CardMedia style={{width:'50%', height:'auto', marginInline:' auto', float:'left', marginInlineEnd:'10px', border:'slategray', borderRadius:'10px'}} component="img" image={entryImage}/></>:null}
-          <Box>
-            {" "}
-            <Typography
-              display={"inline-block"}
-              fontSize={24}
-              color={"textSecondary"}
-            >
-              Author:
-            </Typography>{" "}
-            <Typography display={"inline-block"} fontWeight={'bold'} fontSize={24}>
+    <Card sx={{ marginBottom: "30px", padding: "10px", marginInline: "a`" }}>
+      <CardActionArea>
+        {image ? (
+          <>
+            <CardMedia
+              style={{
+                width: "40%",
+                height: "auto",
+                objectFit: "contain",
+                marginInline: " auto",
+                float: "right",
+                marginTop: "10px",
+                border: "slategray",
+                borderRadius: "10px",
+              }}
+              component="img"
+              image={entryImage}
+            />
+          </>
+        ) : null}
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="div">
+            <strong style={{ display: "block", fontSize: "30px" }}>
               {author}
-            </Typography>
-          </Box>
-          <Box>
-            <Typography
-              display={"inline-block"}
-              color={"textSecondary"}
-              fontSize={24}
-            >
-              Text of message:{" "}
-            </Typography>{" "}
-            <Typography display={"inline-block"} fontWeight={'bold'} fontSize={24}>
-              {" "}
-              {message}{" "}
-            </Typography>
-          </Box>
-      </CardContent>
+            </strong>
+            Text of message: {message}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
     </Card>
-
   );
 };
 

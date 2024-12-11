@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axiosApi from "../axiosApi.ts";
-import { IEntry, IInputEntry } from '../types';
+import { IEntry, IInputEntry } from "../types";
 
 export const fetchAllEntries = createAsyncThunk<IEntry[], void>(
   "entries/fetchAllEntries",
@@ -17,13 +17,12 @@ export const createEntry = createAsyncThunk<void, IInputEntry>(
 
     const keys = Object.keys(inputEntry) as (keyof IInputEntry)[];
 
-    keys.forEach(key => {
+    keys.forEach((key) => {
       const value = inputEntry[key];
-      if( value !== null ) {
+      if (value !== null) {
         formData.append(key, value);
       }
     });
-    return axiosApi.post('/entries', formData);
-  }
+    return axiosApi.post("/entries", formData);
+  },
 );
-

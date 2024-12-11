@@ -1,14 +1,14 @@
 import React, { useCallback, useState } from "react";
-import { IInputEntry } from '../../types';
+import { IInputEntry } from "../../types";
 import { useAppDispatch, useAppSelector } from "../../app/hooks.ts";
 import { toast } from "react-toastify";
 import Grid from "@mui/material/Grid2";
 import { Box, TextField } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { selectAddLoading } from "../../slices/EntriesSlice.ts";
-import FileInput from '../FileInput/FileInput.tsx';
-import { createEntry } from '../../thunks/EntriesThunk.ts';
-
+import FileInput from "../FileInput/FileInput.tsx";
+import { createEntry, fetchAllEntries } from "../../thunks/EntriesThunk.ts";
+import { animateScroll } from "react-scroll";
 
 const initialState: IInputEntry = {
   author: "",
@@ -17,10 +17,7 @@ const initialState: IInputEntry = {
 };
 
 const FormAddNewEntry = () => {
-
-  const [inputEntry, setInputEntry] = useState<IInputEntry>(
-    initialState
-  );
+  const [inputEntry, setInputEntry] = useState<IInputEntry>(initialState);
   const isAddLoading = useAppSelector(selectAddLoading);
   const dispatch = useAppDispatch();
   const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,28 +28,33 @@ const FormAddNewEntry = () => {
     });
   };
 
-  const submitForm = (e: React.FormEvent) => {
+  const fetchMessages = useCallback(async () => {
+    await dispatch(fetchAllEntries());
+    const options = {
+      duration: 500,
+      smooth: true,
+    };
+    animateScroll.scrollToBottom(options);
+  }, [dispatch]);
+
+  const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (
-      inputEntry.message.trim().length > 0
-    ) {
+    if (inputEntry.message.trim().length > 0) {
       setInputEntry({
         ...inputEntry,
         author: inputEntry.author,
         message: inputEntry.message,
       });
       postNewMessage().catch((e) => console.error(e));
+      setTimeout(fetchMessages, 3000);
     } else {
-      alert("Fill all fields.");
+      toast.error("Fill all fields.");
     }
   };
 
   const postNewMessage = useCallback(async () => {
-    if (
-      inputEntry.author.trim().length > 0 &&
-      inputEntry.message.trim().length > 0
-    ) {
+    if (inputEntry.message.trim().length > 0) {
       await dispatch(createEntry(inputEntry));
       toast.success("Message added successfully!");
       setInputEntry(initialState);
@@ -60,10 +62,11 @@ const FormAddNewEntry = () => {
   }, [dispatch, inputEntry]);
 
   const fileEventChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {name, files} = e.target;
+    const { name, files } = e.target;
     if (files) {
-      setInputEntry(prevState => ({
-        ...prevState, [name]: files[0] || null,
+      setInputEntry((prevState) => ({
+        ...prevState,
+        [name]: files[0] || null,
       }));
     }
   };
@@ -94,8 +97,12 @@ const FormAddNewEntry = () => {
             name="message"
           />
         </Grid>
-        <Grid size={8} >
-          <FileInput onGetFile={fileEventChangeHandler} name={'image'} label={'Image'}/>
+        <Grid size={8}>
+          <FileInput
+            onGetFile={fileEventChangeHandler}
+            name={"image"}
+            label={"Image"}
+          />
         </Grid>
         <Box marginTop={1} marginBottom={4}>
           <LoadingButton
