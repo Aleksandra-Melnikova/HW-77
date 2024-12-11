@@ -9,7 +9,7 @@ const
 
 guestbookRouter.get('/', async (req, res) => {
         const entries = await fileDb.getItems();
-        res.send(entries.reverse());
+        res.send(entries);
 });
 
 
